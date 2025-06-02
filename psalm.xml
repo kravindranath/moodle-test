@@ -6,6 +6,6 @@
   resolveFromConfigFile="true"
 >
   <projectFiles>
-    <directory name="src"/>
+    <directory name="."/>
   </projectFiles>
 </psalm>
