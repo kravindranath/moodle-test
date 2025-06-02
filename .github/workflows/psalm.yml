@@ -15,18 +15,22 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Download Psalm
-        run: |
-          curl -sSL https://github.com/vimeo/psalm/releases/latest/download/psalm.phar -o psalm.phar
-          chmod +x psalm.phar
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.1" # or your desired PHP version >=8.0
+          tools: composer
+
+      - name: Install dependencies with Composer
+        run: composer install --no-progress --no-interaction --prefer-dist
 
       - name: Generate Psalm config file (if missing)
         run: |
           if [ ! -f psalm.xml ]; then
-            ./psalm.phar --init
+            ./vendor/bin/psalm --init
           else
             echo "psalm.xml already exists, skipping generation."
           fi
 
       - name: Run Psalm static analysis
-        run: ./psalm.phar --show-info=false --output-format=github
+        run: ./vendor/bin/psalm --show-info=false --output-format=github
