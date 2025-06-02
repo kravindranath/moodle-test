@@ -1,5 +1,5 @@
 {
-    "name": "moodle-test",
+    "name": "moodle/moodle_test",
     "require-dev": {
         "vimeo/psalm": "^5.14"
     },
