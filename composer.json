@@ -1,0 +1,13 @@
+{
+    "name": "moodle/moodle_test",
+    "require-dev": {
+        "vimeo/psalm": "^5.14"
+    },
+    "config": {
+        "platform": {
+            "php": "8.0"
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}
