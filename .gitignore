@@ -1,0 +1,19 @@
+# Ignore everything in moodledata
+moodledata/
+
+# Ignore downloaded Moodle if cloned or created by Docker
+moodle/
+!moodle/.gitkeep  # Keep folder structure if needed
+
+# Editor & OS files
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Docker-generated files
+.env
+*.log
+
+# Node (if you're using front-end tools)
+node_modules/
