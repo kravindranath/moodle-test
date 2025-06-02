@@ -1,4 +1,4 @@
-name: Psalm Static Analysis
+name: Psalm Static Analysis (PHAR)
 
 on:
   push:
@@ -6,24 +6,26 @@ on:
   pull_request:
     branches: ["**"]
   schedule:
-    - cron: "30 0 * * *" # Runs daily at 00:30 UTC
+    - cron: "30 0 * * *" # daily 00:30 UTC
 
 jobs:
   psalm:
-    name: Run Psalm
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up PHP
+      - name: Install PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: "8.2" # Adjust this to your project's PHP version
+          php-version: "8.2"
 
-      - name: Install dependencies
-        run: composer install --no-progress --no-suggest --prefer-dist
+      - name: Download Psalm PHAR
+        run: |
+          curl -L https://github.com/vimeo/psalm/releases/latest/download/psalm.phar -o psalm.phar
+          chmod +x psalm.phar
 
       - name: Run Psalm
-        run: vendor/bin/psalm --output-format=github
+        run: |
+          ./psalm.phar --show-info=false --output-format=github
