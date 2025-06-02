@@ -1,4 +1,4 @@
-name: Psalm Static Analysis (PHAR)
+name: "Psalm Static Analysis"
 
 on:
   push:
@@ -6,26 +6,31 @@ on:
   pull_request:
     branches: ["**"]
   schedule:
-    - cron: "30 0 * * *" # daily 00:30 UTC
+    - cron: "30 0 * * *" # daily at 00:30 UTC
 
 jobs:
-  psalm:
+  analyze:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install PHP
+      - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: "8.2"
+          php-version: "8.1" # or your PHP version
+          tools: composer
 
-      - name: Download Psalm PHAR
-        run: |
-          curl -L https://github.com/vimeo/psalm/releases/latest/download/psalm.phar -o psalm.phar
-          chmod +x psalm.phar
+      - name: Install dependencies
+        run: composer install --no-progress --no-suggest --prefer-dist
 
-      - name: Run Psalm
+      - name: Generate Psalm config file (if missing)
         run: |
-          ./psalm.phar --show-info=false --output-format=github
+          if [ ! -f psalm.xml ]; then
+            ./vendor/bin/psalm --init
+          else
+            echo "psalm.xml already exists, skipping generation."
+          fi
+
+      - name: Run Psalm static analysis
+        run: ./vendor/bin/psalm --show-info=false --output-format=github
