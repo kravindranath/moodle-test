@@ -1,4 +1,4 @@
-name: "Psalm Static Analysis"
+name: Psalm Static Analysis
 
 on:
   push:
@@ -15,22 +15,18 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: "8.1" # or your PHP version
-          tools: composer
-
-      - name: Install dependencies
-        run: composer install --no-progress --no-suggest --prefer-dist
+      - name: Download Psalm
+        run: |
+          curl -sSL https://github.com/vimeo/psalm/releases/latest/download/psalm.phar -o psalm.phar
+          chmod +x psalm.phar
 
       - name: Generate Psalm config file (if missing)
         run: |
           if [ ! -f psalm.xml ]; then
-            ./vendor/bin/psalm --init
+            ./psalm.phar --init
           else
             echo "psalm.xml already exists, skipping generation."
           fi
 
       - name: Run Psalm static analysis
-        run: ./vendor/bin/psalm --show-info=false --output-format=github
+        run: ./psalm.phar --show-info=false --output-format=github
